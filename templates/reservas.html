@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Cinex</title>
+  <title>Cinex | Rersvas</title>
   <!-- Favicon-->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
@@ -23,11 +23,11 @@
       <div class="logo-container color1"><img src="{{ url_for('static', filename='images/CINEX-1.png')}}" alt=""></div>
       <div class="list-group list-group-flush ">
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Cartelera</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Cliente</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Clientes</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/pelicula">Peliculas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Salas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Funciones</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Reservas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/salas">Salas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/funciones">Funciones</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/reservas">Reservas</a>
       </div>
     </div>
     <!-- Page content wrapper-->
@@ -71,10 +71,53 @@
       <div class="container">
         <div>
           <div class="p-lg-1">
-            <h1 class="mt-4">Ingreso de Peliculas</h1>
+            <h1 class="mt-4">Ingreso de Reservas</h1>
             <p>De acuerdo a lo pedido ingrese los datos.</p>
           </div>
-
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Reserva</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="formulario" method="POST">
+                    <div class="mb-3">
+                      <label for="recipient-name" class="col-form-label">ID:</label>
+                      <input type="text" name="reserva_id" id="reserva_id" class="form-control" placeholder="" />
+                    </div>
+                    <div class="mb-3" name="funcion_id">
+                      <label for="recipient-name" class="col-form-label" >Funcion:</label>
+                      <select class="form-select" id="funcion_id" name="funcion_id">
+                        {% for Funcion in Funciones %}
+                        <option  name="funcion_id" id="funcion_id" value="{{Funcion.funcion_id}}">Pelicula: {{ Funcion.titulo }} Fecha: {{ Funcion.fecha_hora }} </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="recipient-name" class="col-form-label">Sala:</label>
+                      <select class="form-select" id="cliente_id" name="cliente_id">
+                        {% for Cliente in Clientes %}
+                        <option name="cliente_id" id="cliente_id" value="{{Cliente.cedula}}">Cedula: {{ Cliente.cedula }} Nombre: {{ Cliente.nombre }} </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="recipient-name" class="col-form-label">Tickets:</label>
+                      <input type="text" name="cantidad_tickets" id="cantidad_tickets" class="form-control" id="floatingInput" placeholder="" />
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerar</button>
+                    <button type="submit"  role="button"class="btn btn-primary" onclick="guardar">Guardar</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div class="col-12">
             {% with messages = get_flashed_messages() %} {% if messages %} {%
             for message in messages %}
@@ -84,47 +127,35 @@
             </div>
             {% endfor %} {% endif %} {% endwith%}
           </div>
-          <form action="/add_pelicula" method="POST" class="row g-3 mt-3 mb-3">
+          <form action="/add_reservas" method="POST" class="row g-3 mt-3 mb-3">
             <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="titulo" class="form-control" id="floatingInput" placeholder="Titulo" />
-                <label for="floatingInput">Titulo</label>
+              <div class="form-floating mb-1" name="funcion_id">
+                <select class="form-select" name="funcion_id" id="inputGroupSelect02">
+                  {% for Funcion in Funciones %}
+                  <option name="funcion_id" value="{{Funcion.funcion_id}}">Pelicula: {{ Funcion.titulo }} Fecha: {{ Funcion.fecha_hora }} </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating mb-1" name="cliente_id">
+                <select class="form-select" name="cliente_id" id="inputGroupSelect02">
+                  {% for  Cliente in Clientes %}
+                  <option name="cliente_id" value="{{Cliente.cedula}}">Cedula: {{ Cliente.cedula }} Nombre: {{ Cliente.nombre }} </option>
+                  {% endfor %}
+                </select>
               </div>
             </div>
             <div class="col-6">
               <div class="form-floating mb-1">
-                <input type="text" name="genero" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Genero</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="duracion" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Duracion</label>
+                <input type="text" name="cantidad_tickets"class="form-control" id="floatingInput" placeholder="Cedula" />
+                <label for="floatingInput">Tickets</label>
               </div>
             </div>
 
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="clasificacion" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Clasificacion</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="file" name="img" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput"></label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="sipnosis" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Sipnosis</label>
-              </div>
-            </div>
             <div class="col-6 text-xl-center">
               <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Button</button>
+                <button class="btn btn-primary" type="submit">Ingresar</button>
               </div>
             </div>
           </form>
@@ -141,29 +172,31 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Titulo</th>
-                <th>Genero</th>
-                <th>Duracion</th>
-                <th>Clasificacion</th>
-                <th>Sipnosis</th>
-                <th>Operacion</th>
+                <th>Funcion ID</th>
+                <th>Pelicula ID</th>
+                <th>Fecha</th>
+                <th>Cedula</th>
+                <th>Nombre</th>
+                <th>Tickets</th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
-              {% for pelicula in peliculas %}
+              {% for reserva in reservas %}
               <tr>
-                <td>{{ pelicula.0 }}</td>
-                <td>{{ pelicula.1 }}</td>
-                <td>{{ pelicula.2 }}</td>
-                <td>{{ pelicula.3 }}</td>
-                <td>{{ pelicula.4 }}</td>
-                <td>{{ pelicula.6 }}</td>
+                <td>{{ reserva.reserva_id }}</td>
+                <td>{{ reserva.funcion_id }}</td>
+                <td>{{ reserva.titulo }}</td>
+                <td>{{ reserva.fecha_hora }}</td>
+                <td>{{ reserva.cliente_id }}</td>
+                <td>{{ reserva.nombre }}</td>
+                <td>{{ reserva.cantidad_tickets }}</td>
                 <td>
-                  <a href="/edit/{{pelicula.0}}" class="btn btn-primary" alt="Eliminar"><span class="material-symbols-outlined">
-                    delete
-                    </span></a>
-                  <a href="/delete/{{pelicula.0}}" class="btn btn-primary btn-delete"><span class="material-symbols-outlined">
+                  <a role="button" onclick="editar('{{reserva.reserva_id}}')"  id="editar" class="btn btn-primary btn-delete" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><span class="material-symbols-outlined">
                     edit_note
+                    </span></a>
+                  <a href="/delete_reserva/{{reserva.reserva_id}}" class="btn btn-primary btn-delete"><span class="material-symbols-outlined">
+                    delete
                     </span></a>
                 </td>
               </tr>
@@ -178,6 +211,23 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core theme JS-->
   <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+  async function editar(id) {
+    "use strict";
+    const response = await fetch("/reserva/json/"+id);
+    const data = await response.json();
+    console.log(data);
+    $('#reserva_id').val(data.reserva_id);
+    $('#funcion_id').val(data.funcion_id);
+    $('#cliente_id').val(data.cliente_id);
+    $('#cantidad_tickets').val(data.cantidad_tickets);
+    $("#formulario").attr("action", `/reserva/update/` + id);
+
+  }
+</script>
 </body>
 
 </html>

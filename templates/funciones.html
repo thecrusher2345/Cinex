@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Cinex</title>
+  <title>Cinex | Funciones </title>
   <!-- Favicon-->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
@@ -23,11 +23,11 @@
       <div class="logo-container color1"><img src="{{ url_for('static', filename='images/CINEX-1.png')}}" alt=""></div>
       <div class="list-group list-group-flush ">
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Cartelera</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Cliente</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Clientes</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/pelicula">Peliculas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Salas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Funciones</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Reservas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/salas">Salas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/funciones">Funciones</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/reservas">Reservas</a>
       </div>
     </div>
     <!-- Page content wrapper-->
@@ -66,14 +66,60 @@
       <!-- Page content-->
 
       <!-- header section end -->
+      
       <!-- client section start -->
 
       <div class="container">
         <div>
           <div class="p-lg-1">
-            <h1 class="mt-4">Ingreso de Clientes</h1>
+            <h1 class="mt-4">Ingreso de Funciones</h1>
             <p>De acuerdo a lo pedido ingrese los datos.</p>
           </div>
+          <!-- modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Funcion</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formulario" method="POST">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">ID:</label>
+            <input type="text" name="funcion_id" id="funcion_id" class="form-control" placeholder="" />
+          </div>
+          <div class="mb-3" name="pelicula_id">
+            <label for="recipient-name" class="col-form-label" >Pelicula:</label>
+            <select class="form-select" id="pelicula_id" name="pelicula_id">
+              {% for Pelicula in Peliculas %}
+              <option  name="pelicula_id" id="pelicula_id" value="{{Pelicula.pelicula_id}}">{{ Pelicula.titulo }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Sala:</label>
+            <select class="form-select" id="sala_id" name="sala_id">
+              {% for Sala in Salas %}
+              <option name="sala_id" id="sala_id" value="{{Sala.sala_id}}">{{ Sala.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Fecha:</label>
+            <input type="datetime-local" name="fecha_hora" id="fecha_hora" class="form-control" id="floatingInput" placeholder="" />
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerar</button>
+          <button type="submit"  role="button"class="btn btn-primary" onclick="guardar">Guardar</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 
           <div class="col-12">
             {% with messages = get_flashed_messages() %} {% if messages %} {%
@@ -84,40 +130,34 @@
             </div>
             {% endfor %} {% endif %} {% endwith%}
           </div>
-          <form action="/add_cliente" method="POST" class="row g-3 mt-3 mb-3">
+          <form action="/add_funcion" method="POST" class="row g-3 mt-3 mb-3">
             <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="cliente_id" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Cedula</label>
+              <div class="form-floating mb-1" name="pelicula_id" >
+                <select class="form-select" name="pelicula_id" id="inputGroupSelect02">
+                  {% for Pelicula in Peliculas %}
+                  <option name="pelicula_id" value="{{Pelicula.pelicula_id}}">{{ Pelicula.titulo }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating mb-1" name="sala_id">
+                <select class="form-select" name="sala_id" id="inputGroupSelect02">
+                  {% for Sala in Salas %}
+                  <option name="sala_id" value="{{Sala.sala_id}}">{{ Sala.nombre }}</option>
+                  {% endfor %}
+                </select>
               </div>
             </div>
             <div class="col-6">
               <div class="form-floating mb-1">
-                <input type="text" name="nombre" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Nombre</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="apellido" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Apellido</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="email" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Email</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="telefono" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Telefono</label>
+                <input type="datetime-local" pattern="YYYY-MM-DD HH:MM:SS" name="fecha_hora" class="form-control" id="floatingInput"  min="2023-01-01T00:00:00" max="2023-12-31T23:59:59"/>
+                <label for="floatingInput">Fecha</label>
               </div>
             </div>
             <div class="col-6 text-xl-center">
               <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Button</button>
+                <button class="btn btn-primary" type="submit">Ingresar</button>
               </div>
             </div>
           </form>
@@ -133,27 +173,33 @@
           <table class="table" id="tabla">
             <thead>
               <tr>
-                <th>Cedula</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Telefono</th>
-                <th>Operacion</th>
+                <th>ID</th>
+                <th>Pelicula ID</th>
+                <th>Titulo</th>
+                <th>Sala ID</th>
+                <th>Sala</th>
+                <th>Fecha</th>
+                <th>Asientos Disponible</th>
+                <th>Operaciones</th>
+      <!-- terminar funciones el editar   -->
+
               </tr>
             </thead>
             <tbody>
-              {% for cliente in clientes %}
+              {% for funcion in Funciones %}
               <tr>
-                <td>{{ cliente.0 }}</td>
-                <td>{{ cliente.1 }}</td>
-                <td>{{ cliente.2 }}</td>
-                <td>{{ cliente.3 }}</td>
-                <td>{{ cliente.4 }}</td>
+                <td>{{ funcion.funcion_id }}</td>
+                <td>{{ funcion.pelicula_id }}</td>
+                <td>{{ funcion.titulo }}</td>
+                <td>{{ funcion.sala_id }}</td>
+                <td>{{ funcion.nombre }}</td>
+                <td>{{ funcion.fecha_hora }}</td>
+                <td>{{ funcion.disponible }}</td>
                 <td>
-                  <a href="/delete_cliente/{{cliente.0}}" class="btn btn-primary btn-delete" alt="Eliminar"><span class="material-symbols-outlined">
+                  <a href="/delete_funcion/{{funcion.funcion_id}}" class="btn btn-primary btn-delete" alt="Eliminar"><span class="material-symbols-outlined">
                     delete
                     </span></a>
-                  <a href="/edit/{{cliente.0}}" class="btn btn-primary "><span class="material-symbols-outlined">
+                  <a role="button" onclick="editar('{{funcion.funcion_id}}')"  class="btn btn-primary " id="editar" class="btn btn-primary btn-delete" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"  ><span class="material-symbols-outlined">
                     edit_note
                     </span></a>
                 </td>
@@ -169,6 +215,25 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core theme JS-->
   <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+  async function editar(funcion_id) {
+    "use strict";
+    const response = await fetch("/funcion/json/"+funcion_id);
+    const data = await response.json();
+    console.log(data);
+    $('#funcion_id').val(data.funcion_id);
+    $('#pelicula_id').val(data.pelicula_id);
+    $('#titulo').val(data.titulo);
+    $('#sala_id').val(data.sala_id);
+    $('#nombre').val(data.nombre);
+    $('#fecha_hora').val(data.fecha_hora);
+    $("#formulario").attr("action", `/funcion/update/` + funcion_id);
+
+  }
+</script>
 </body>
 
 </html>

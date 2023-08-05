@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Cinex</title>
+  <title>Cinex | Salas</title>
   <!-- Favicon-->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
@@ -23,11 +23,11 @@
       <div class="logo-container color1"><img src="{{ url_for('static', filename='images/CINEX-1.png')}}" alt=""></div>
       <div class="list-group list-group-flush ">
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Cartelera</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Cliente</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Clientes</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/pelicula">Peliculas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Salas</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Funciones</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Reservas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/salas">Salas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/funciones">Funciones</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/reservas">Reservas</a>
       </div>
     </div>
     <!-- Page content wrapper-->
@@ -71,9 +71,41 @@
       <div class="container">
         <div>
           <div class="p-lg-1">
-            <h1 class="mt-4">Ingreso de Clientes</h1>
+            <h1 class="mt-4">Ingreso de Salas</h1>
             <p>De acuerdo a lo pedido ingrese los datos.</p>
           </div>
+<!-- modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Sala</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formulario" method="POST">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">ID:</label>
+            <input type="text" name="sala_id" class="form-control" id="sala_id"  />
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Nombre:</label>
+            <input type="text" name="nombre" class="form-control" id="nombre"  />
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Capacidad:</label>
+            <input type="text" name="capacidad" class="form-control" id="capacidad"  />
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerar</button>
+          <button type="submit"  role="button"class="btn btn-primary" onclick="guardar">Guardar</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
 
           <div class="col-12">
             {% with messages = get_flashed_messages() %} {% if messages %} {%
@@ -84,40 +116,22 @@
             </div>
             {% endfor %} {% endif %} {% endwith%}
           </div>
-          <form action="/add_cliente" method="POST" class="row g-3 mt-3 mb-3">
+          <form action="/add_salas" method="POST" class="row g-3 mt-3 mb-3">
             <div class="col-6">
               <div class="form-floating mb-1">
-                <input type="text" name="cliente_id" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Cedula</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="nombre" class="form-control" id="floatingInput" placeholder="Cedula" />
+                <input type="text" name="nombre" class="form-control" id="floatingInput" placeholder="nombre" />
                 <label for="floatingInput">Nombre</label>
               </div>
             </div>
             <div class="col-6">
               <div class="form-floating mb-1">
-                <input type="text" name="apellido" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Apellido</label>
+                <input type="text" name="capacidad" class="form-control" id="floatingInput" placeholder="capacidad" />
+                <label for="floatingInput">Capacidad</label>
               </div>
             </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="email" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Email</label>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="form-floating mb-1">
-                <input type="text" name="telefono" class="form-control" id="floatingInput" placeholder="Cedula" />
-                <label for="floatingInput">Telefono</label>
-              </div>
-            </div>
-            <div class="col-6 text-xl-center">
+            <div class="col-12 text-xl-center">
               <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Button</button>
+                <button class="btn btn-primary" type="submit">Ingresar</button>
               </div>
             </div>
           </form>
@@ -133,27 +147,23 @@
           <table class="table" id="tabla">
             <thead>
               <tr>
-                <th>Cedula</th>
+                <th>ID</th>
                 <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Telefono</th>
-                <th>Operacion</th>
+                <th>Capacidad</th>
+                <th>Operaciones</th>
               </tr>
             </thead>
             <tbody>
-              {% for cliente in clientes %}
+              {% for sala in salas %}
               <tr>
-                <td>{{ cliente.0 }}</td>
-                <td>{{ cliente.1 }}</td>
-                <td>{{ cliente.2 }}</td>
-                <td>{{ cliente.3 }}</td>
-                <td>{{ cliente.4 }}</td>
+                <td>{{ sala.sala_id }}</td>
+                <td>{{ sala.nombre }}</td>
+                <td>{{ sala.capacidad }}</td>
                 <td>
-                  <a href="/delete_cliente/{{cliente.0}}" class="btn btn-primary btn-delete" alt="Eliminar"><span class="material-symbols-outlined">
+                  <a href="/delete_salas/{{sala.sala_id}}" class="btn btn-primary btn-delete" alt="Eliminar"><span class="material-symbols-outlined">
                     delete
                     </span></a>
-                  <a href="/edit/{{cliente.0}}" class="btn btn-primary "><span class="material-symbols-outlined">
+                  <a role="button" onclick="editar('{{sala.sala_id}}')"  class="btn btn-primary "  id="editar" class="btn btn-primary btn-delete" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" ><span class="material-symbols-outlined">
                     edit_note
                     </span></a>
                 </td>
@@ -169,6 +179,23 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core theme JS-->
   <script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<script>
+  async function editar(id) {
+    "use strict";
+    const response = await fetch("/sala/json/"+id);
+    const data = await response.json();
+    console.log(data);
+    $('#sala_id').val(data.sala_id);
+    $('#nombre').val(data.nombre);
+    $('#capacidad').val(data.capacidad);
+  
+    $("#formulario").attr("action", `/sala/update/` + id);
+
+  }
+</script>
 </body>
 
 </html>

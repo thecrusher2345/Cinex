@@ -33,3 +33,10 @@
 .color4{
     background: #F8F6F4;
 }
+
+#modificar,
+#eliminar {
+  --bs-btn-padding-y: 0.3rem !important;
+  --bs-btn-padding-x: 0.3rem !important;
+  --bs-btn-font-size: 0.75rem !important;
+}

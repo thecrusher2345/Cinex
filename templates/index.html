@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Simple Sidebar - Start Bootstrap Template</title>
+  <title>Cinex | Cartelera</title>
   <!-- Favicon-->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
   <!-- Core theme CSS (includes Bootstrap)-->
@@ -21,12 +21,12 @@
         Start Bootstrap
       </div>
       <div class="list-group list-group-flush">
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Dashboard</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Cliente</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Cartelera</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/cliente">Clientes</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/pelicula">Peliculas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/salas">Salas</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/funciones">Funciones</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/reservas">Reservas</a>
       </div>
     </div>
     <!-- Page content wrapper-->
@@ -35,7 +35,7 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div class="container-fluid">
           <button class="btn btn-primary" id="sidebarToggle">
-            Toggle Menu
+            Menu
           </button>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -64,20 +64,21 @@
       </nav>
       <!-- Page content-->
       <div class="container-fluid">
-        <h1 class="mt-4">Simple Sidebar</h1>
-        <p>
-          The starting state of the menu will appear collapsed on smaller
-          screens, and will appear non-collapsed on larger screens. When
-          toggled using the button below, the menu will change.
-        </p>
-        <p>
-          Make sure to keep all page content within the
-          <code>#page-content-wrapper</code>
-          . The top navbar is optional, and just for demonstration. Just
-          create an element with the
-          <code>#sidebarToggle</code>
-          ID which will toggle the menu when clicked.
-        </p>
+        <div class="row">
+          {% for pelicula in peliculas %}
+            <div class="col-md-4">
+              <div class="card">
+                <img src="{{ url_for('static', filename='upload/' + pelicula.img)}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{ pelicula.titulo }}</h5>
+                  <p class="card-text">{{ pelicula.sipnosis }}</p>
+                </div>
+                <div class="card-footer">
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
